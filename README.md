@@ -1,19 +1,17 @@
 # Docker for Symfony project template
 
-Template for Symfony 4 projects with nginx, PHP and MySQL.
+Template for Symfony 4/5 projects with nginx, PHP and MySQL.
 
 ### Tech data
 
-Nginx serve project on [port 8000](https://localhost:8000). Also PHPMyAdmin is
+Nginx serve project on [port 8000](http://localhost:8000). Also PHPMyAdmin is
  served on [port 8001](http://localhost:8001).
 
-Nginx create self-signed certificate for _localhost_ domain and automatically
- redirects from **http** to **https**.
-
-Access to MySQL: `mysql://root:password@mysql:3306/database` (put it in
+Access to MySQL: `mysql://root:password@database:3306/database` (put it in
  **/.env** file).
 
 Remember to uncomment schema update or migrations in
- **/.misc/docker/php/start.sh**. You can also add own start commands to this file.
+ **/.misc/docker/php/start.sh**. You can also add own start commands to this
+ file.
 
 After each change in **/.misc/docker/** you have to rebuild docker images.

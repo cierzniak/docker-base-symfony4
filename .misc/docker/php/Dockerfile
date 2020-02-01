@@ -1,18 +1,19 @@
-FROM php:7.3-fpm-alpine
+FROM php:7.4-fpm
 
-COPY php.ini /usr/local/etc/php/
+RUN apt-get update -y \
+    && apt-get install -y zip git wait-for-it \
+    && rm -r /var/lib/apt/lists/*
 
-RUN apk --no-cache add --virtual .build-deps bash git zip
-
-RUN docker-php-ext-configure opcache --enable-opcache
-RUN docker-php-ext-install pdo_mysql opcache
+RUN docker-php-ext-configure opcache --enable-opcache \
+    && docker-php-ext-install pdo_mysql opcache
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
-      /usr/bin/wait-for-it
-RUN chmod +x /usr/bin/wait-for-it
+RUN echo "[www]\naccess.log = /proc/self/fd/1" \
+    > /usr/local/etc/php-fpm.d/yy-access.conf
+
+COPY php.ini /usr/local/etc/php/
 
 WORKDIR /app
 

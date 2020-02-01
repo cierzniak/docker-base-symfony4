@@ -1,35 +1,27 @@
-version: '3.5'
+version: '3.7'
 
 services:
   php:
     build: ./.misc/docker/php
+    volumes: [.:/app]
+  web:
+    build: ./.misc/docker/web
     volumes:
-    - .:/app
-  nginx:
-    build: ./.misc/docker/nginx
+    - ./public:/app/php
+    - phpmyadmin-files:/app/phpmyadmin
+    ports: [8000-8001:8000-8001]
+  database:
+    build: ./.misc/docker/database
     volumes:
-    - ./public:/app/public
-    ports:
-    - 8000:8000
-  mysql:
-    image: mysql:5.7
-    volumes:
-    - mysql_data:/var/lib/mysql
-    - ./.misc/docker/mysql-schema:/docker-entrypoint-initdb.d
+    - database-data:/var/lib/mysql
+    - ./.misc/docker/database/schema:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: database
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    links:
-    - mysql
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: password
-    ports:
-    - 8001:80
+    build: ./.misc/docker/phpmyadmin
+    volumes: [phpmyadmin-files:/var/www/html]
 
 volumes:
-  mysql_data:
+  database-data:
+  phpmyadmin-files:
