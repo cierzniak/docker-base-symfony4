@@ -5,22 +5,22 @@ x-logging: &logging
 
 services:
   php:
-    build: ./.misc/docker/php
+    build: _misc/docker/php
     volumes: [.:/app]
   web:
-    build: ./.misc/docker/web
+    build: _misc/docker/web
     volumes:
     - ./public:/app/php
     - phpmyadmin-files:/app/phpmyadmin
     ports: [8000-8001:8000-8001]
   database:
-    build: ./.misc/docker/database
+    build: _misc/docker/database
     volumes:
     - database-data:/var/lib/mysql
-    - ./.misc/docker/database/schema:/docker-entrypoint-initdb.d
+    - ./_misc/docker/database/schema:/docker-entrypoint-initdb.d
   phpmyadmin:
     <<: *logging
-    build: ./.misc/docker/phpmyadmin
+    build: _misc/docker/phpmyadmin
     volumes: [phpmyadmin-files:/var/www/html]
 
 volumes:
