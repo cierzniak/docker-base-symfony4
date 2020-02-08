@@ -1,6 +1,6 @@
 # Docker for Symfony project template
 
-Template for Symfony 4/5 projects with nginx, PHP and MySQL.
+Template for Symfony 4/5 projects with nginx, PHP and MySQL (MariaDB).
 
 ### Tech data
 

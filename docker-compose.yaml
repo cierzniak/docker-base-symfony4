@@ -1,5 +1,8 @@
 version: '3.7'
 
+x-logging: &logging
+  logging: { driver: none }
+
 services:
   php:
     build: ./.misc/docker/php
@@ -15,10 +18,8 @@ services:
     volumes:
     - database-data:/var/lib/mysql
     - ./.misc/docker/database/schema:/docker-entrypoint-initdb.d
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: database
   phpmyadmin:
+    <<: *logging
     build: ./.misc/docker/phpmyadmin
     volumes: [phpmyadmin-files:/var/www/html]
 
