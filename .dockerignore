@@ -1,0 +1,18 @@
+# Docker related
+/.misc/
+!/.misc/docker/app/
+
+# Project related
+/public/bundles/
+/tests/
+/var/
+/vendor/
+/.env.*
+
+# Other
+/.git/
+/.gitignore
+/.dockerignore
+/docker-compose.yaml
+/Dockerfile
+/README.md

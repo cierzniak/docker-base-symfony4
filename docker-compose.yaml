@@ -1,28 +1,36 @@
-version: '3.7'
-
-x-logging: &logging
-  logging: { driver: none }
+version: '3.3'
 
 services:
-  php:
-    build: _misc/docker/php
-    volumes: [.:/app]
-  web:
-    build: _misc/docker/web
+  app:
+    build:
+      context: .
+      args:
+      - TARGET=dev
     volumes:
-    - ./public:/app/php
-    - phpmyadmin-files:/app/phpmyadmin
-    ports: [8000-8001:8000-8001]
+    - .:/app:rw
+    ports:
+    - 0.0.0.0:8000:80/tcp
   database:
-    build: _misc/docker/database
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: s3cret
+      MYSQL_DATABASE: project
     volumes:
-    - database-data:/var/lib/mysql
-    - ./_misc/docker/database/schema:/docker-entrypoint-initdb.d
+    - database_data:/var/lib/mysql:rw
+    - ./_misc/docker/database/schema:/docker-entrypoint-initdb.d:ro
   phpmyadmin:
-    <<: *logging
-    build: _misc/docker/phpmyadmin
-    volumes: [phpmyadmin-files:/var/www/html]
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: s3cret
+      UPLOAD_LIMIT: 2048M
+      PMA_USER_CONFIG_BASE64: PD9waHAKJGNmZ1snVGVtcERpciddID0gJy90bXAnOw==
+    ports:
+    - 127.0.0.1:8001:80/tcp
+    logging:
+      driver: none
 
 volumes:
-  database-data:
-  phpmyadmin-files:
+  database_data:
